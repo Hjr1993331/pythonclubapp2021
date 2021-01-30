@@ -20,6 +20,13 @@ class Meeting(models.Model):
     dateentered=models.DateField()
     meetingtime=models.TimeField()
 
+    # def discountaAmount(self):
+    #     self.discount = self.price * .05
+    #     return self.discount
+
+    # def discountPrice(self):  
+    #     self.discountPrice = self.price - self.discount  
+
     def __str__(self):
         return self.meetingtitle
 

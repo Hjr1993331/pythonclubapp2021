@@ -2,6 +2,7 @@ from django.test import TestCase
 from django.contrib.auth.models import User
 from .models import MeetingMinute, Meeting, Resource
 import datetime 
+from .forms import MeetingForm, MeetingMinuteForm, ResourceForm 
 
 # Create your tests here.
 
@@ -39,4 +40,53 @@ class ResourceTest(TestCase):
     def test_string(self):
         self.assertEqual(str(self.resource), 'Django Super Class')
 
-                   
+
+class NewMeetingForm(TestCase):
+    def test_meetingform(self):
+        data = {
+                'meetingtitle':'django class',  'meetinglocation':'seattle', 
+                'user':'hijiri', 
+                'meetingtype':'django fun class',
+                'dateentered': '2021-1-30',
+                'meetingtime': '22:55:29'  
+            }   
+        form = MeetingForm (data) 
+        self.assertTrue(form.is_valid)
+
+    # def test_Meetingform_Invalid(self): 
+    #     data = {
+    #             'meetingtitle':'django class',  'meetinglocation':'Seattle',
+    #             'use':'Hijiri', 
+    #             'meetingtype':'django fun class',
+    #             'datentered': 'Jan 2021'
+                 
+    #         }  
+    #     form = MeetingForm (data) 
+    #     self.assertFalse(form.is_valid)     
+
+
+class NewMeetingMinuteForm(TestCase):
+    def test_meetingminuteform(self):
+        data = {
+               'meetingname':'django fun class',
+               'minutedescription':'Have fun!'   
+            }   
+        form = MeetingMinuteForm (data) 
+        self.assertTrue(form.is_valid)
+
+
+class NewResourceForm(TestCase):
+    def test_resourceform(self):
+        data = {
+               'name':'django fun class meeting',
+               'location':'seattle',
+               'user':'hijiri', 
+               'meeting':'fun class', 
+               'date':'2021-1-30', 
+               'time':'22:55:29', 
+               'text':'Fun meeting',   
+               'url':'https://stackoverflow.com/questions/20723646/form-is-valid-returns-false-django', 
+               'description':'Meeting is fun!'
+            }   
+        form = ResourceForm (data) 
+        self.assertTrue(form.is_valid)        

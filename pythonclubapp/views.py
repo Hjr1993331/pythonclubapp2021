@@ -1,7 +1,9 @@
 from django.shortcuts import render, get_object_or_404
 from .models import Meeting, MeetingMinute, Resource
 from django.urls import reverse_lazy
-
+from .forms import MeetingForm
+from .forms import ResourceForm
+from .forms import MeetingMinuteForm
 # Create your views here.
 
 
@@ -32,3 +34,46 @@ def meetingminuteDetail(request, id):
 def resourceDetail(request, id):
     resource = get_object_or_404(Resource, pk = id)
     return render(request, 'pythonclubapp/resourcedetail.html', {'resource' : resource})             
+
+
+
+
+def newMeeting(request):
+    form = MeetingForm
+
+    if request.method == 'POST':
+        form=MeetingForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit = True)
+            post.save()
+            form = MeetingForm()
+    else:
+        form = MeetingForm()
+    return render(request, 'pythonclubapp/newmeeting.html', {'form': form})  
+
+def newMeetingMinute(request):
+    form = MeetingMinuteForm
+
+    if request.method == 'POST':
+        form=MeetingMinuteForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit = True)
+            post.save()
+            form = MeetingMinuteForm()
+    else:
+        form = MeetingMinuteForm()
+    return render(request, 'pythonclubapp/newmeetingminute.html', {'form': form})       
+
+
+def newResource(request):
+    form = ResourceForm
+
+    if request.method == 'POST':
+        form=ResourceForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit = True)
+            post.save()
+            form = ResourceForm()
+    else:
+        form = ResourceForm()
+    return render(request, 'pythonclubapp/newresource.html', {'form': form})              

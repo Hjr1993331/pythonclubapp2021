@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from .models import MeetingMinute, Meeting, Resource
 import datetime 
 from .forms import MeetingForm, MeetingMinuteForm, ResourceForm 
-
+from django.urls import reverse_lazy, reverse
 # Create your tests here.
 
 class MeetingMinuteTest(TestCase):
@@ -90,3 +90,40 @@ class NewResourceForm(TestCase):
             }   
         form = ResourceForm (data) 
         self.assertTrue(form.is_valid)        
+
+class New_Meeting_Authentication_Test(TestCase):
+    def setUp(self):
+        self.test_user = User.objects.create_user(username = 'testuser1', password =  'P@ssw0rd!')
+        self.type = MeetingMinute.objects.create(meetingname = 'Meeting Class')
+        self.meeting = Meeting.objects.create(meetingtitle = 'Django Super Fun Class', meetingtype = self.type, user = self.test_user, dateentered = datetime.date(2021,1,29), meetinglocation = 'Seattle', meetingtime = datetime.time(22,55,29))
+
+    def test_redirect_if_not_logged_in(self):
+        response=self.client.get(reverse('newmeetings'))    
+        self.assertRedirects(response, '/accounts/login/?next=/pythonclubapp/newmeetings/')
+
+
+class New_MeetingMinute_Authentication_Test(TestCase):
+    def setUp(self):
+        self.test_user = User.objects.create_user(username = 'testuser1', password =  'P@ssw0rd!')
+        self.type = MeetingMinute.objects.create(meetingname = 'Meeting Class')
+        self.meeting = Meeting.objects.create(meetingtitle = 'Django Super Fun Class', meetingtype = self.type, user = self.test_user, dateentered = datetime.date(2021,1,29), meetinglocation = 'Seattle', meetingtime = datetime.time(22,55,29))
+        self.meetingminute = MeetingMinute.objects.create(minutesdescription = 'Have fun!')
+
+    def test_redirect_if_not_logged_in(self):
+        response=self.client.get(reverse('newmeetingminutes'))    
+        self.assertRedirects(response, '/accounts/login/?next=/pythonclubapp/newmeetingminutes/')
+
+
+class New_Resource_Authentication_Test(TestCase):
+    def setUp(self):
+        self.test_user = User.objects.create_user(username = 'testuser1', password =  'P@ssw0rd!')
+        self.type = MeetingMinute.objects.create(meetingname = 'Meeting Class')
+        self.meetingminute = MeetingMinute.objects.create(minutesdescription = 'Have fun!')
+        self.meeting = Meeting.objects.create(meetingtitle = 'Django Super Fun Class', meetingtype = self.type, user = self.test_user, dateentered = datetime.date(2021,1,29), meetinglocation = 'Seattle', meetingtime = datetime.time(22,55,29))
+        self.resource = Resource.objects.create(name = 'Django Super Class', location = 'Seattle', user = self.test_user, meeting = self.meeting, date = datetime.date(2021,1,29), time = datetime.time(22,55,29), text = 'Have Fun!', url='http://www.meeting.com', description="Meeting is so much fun!")
+
+    def test_redirect_if_not_logged_in(self):
+        response=self.client.get(reverse('newresources'))    
+        self.assertRedirects(response, '/accounts/login/?next=/pythonclubapp/newresources/')
+
+           
